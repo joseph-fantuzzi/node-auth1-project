@@ -2,7 +2,9 @@ const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
 const session = require("express-session");
-// const KnexSessionStore = require("connect-session-knex")(session);
+const KnexSessionStore = require("connect-session-knex")(session);
+
+const UsersRouter = require("./users/users-router");
 
 /**
   Do what needs to be done to support sessions with the `express-session` package!
@@ -30,7 +32,7 @@ const sessionConfig = {
   resave: false,
   saveUninitialized: false,
   //   store: new KnexSessionStore({
-  //     knex: require("../database/db-config"),
+  //     knex: require("../data/db-config"),
   //     tablename: "sessions",
   //     sidfieldname: "sid",
   //     createtable: true,
@@ -42,6 +44,8 @@ server.use(session(sessionConfig));
 server.use(helmet());
 server.use(express.json());
 server.use(cors());
+
+server.use("/api/users", UsersRouter);
 
 server.get("/", (req, res) => {
   res.json({ api: "up" });
