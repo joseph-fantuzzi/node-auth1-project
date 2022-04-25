@@ -10,7 +10,7 @@ const Users = require("../users/users-model");
 */
 
 function restricted(req, res, next) {
-  if    (req.session && req.session.user) {
+  if (req.session && req.session.user) {
     next();
   } else {
     res.status(401).json({ message: "You shall not pass!" });
@@ -27,17 +27,19 @@ function restricted(req, res, next) {
 */
 function checkUsernameFree(req, res, next) {
   const { username } = req.body;
-  Users.findBy({ username }).first()
-   .then(user => {
+  Users.findBy({ username })
+    .first()
+    .then((user) => {
       if (user) {
-         res.status(422).json({ message: "Username taken" })
+        res.status(422).json({ message: "Username taken" });
       } else {
-         next();
+        next();
       }
-   })
-   .catch(err => {
+    })
+    .catch((err) => {
       next(err);
-   })
+    });
+}
 
 /*
   If the username in req.body does NOT exist in the database
@@ -48,18 +50,19 @@ function checkUsernameFree(req, res, next) {
   }
 */
 function checkUsernameExists(req, res, next) {
-   const { username } = req.body;
-   Users.findBy({ username }).first()
-   .then(user => {
+  const { username } = req.body;
+  Users.findBy({ username })
+    .first()
+    .then((user) => {
       if (!user) {
-         res.status(401).json({ message: "Invalid credentials" })
+        res.status(401).json({ message: "Invalid credentials" });
       } else {
-         next();
+        next();
       }
-   })
-   .catch(err => {
+    })
+    .catch((err) => {
       next(err);
-   })
+    });
 }
 
 /*
@@ -71,19 +74,19 @@ function checkUsernameExists(req, res, next) {
   }
 */
 function checkPasswordLength(req, res, next) {
-   const { password } = req.body;
-   if (!password || password.length <= 3) {
-      res.status(422).json({ message: "Password must be longer than 3 chars" })
-   } else {
-      next();
-   }
+  const { password } = req.body;
+  if (!password || password.length <= 3) {
+    res.status(422).json({ message: "Password must be longer than 3 chars" });
+  } else {
+    next();
+  }
 }
 
 // Don't forget to add these to the `exports` object so they can be required in other modules
 
 module.exports = {
-   restricted,
-   checkUsernameFree,
-   checkUsernameExists,
-   checkPasswordLength
-}
+  restricted,
+  checkUsernameFree,
+  checkUsernameExists,
+  checkPasswordLength,
+};
