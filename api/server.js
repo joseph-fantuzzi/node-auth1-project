@@ -26,19 +26,19 @@ const sessionConfig = {
   name: "chocolatechip",
   secret: "this is a secret",
   cookie: {
-    maxAge: 1000 * 30,
+    maxAge: 1000 * 60 * 10,
     secure: false,
     httpOnly: true,
   },
   resave: false,
   saveUninitialized: false,
-  //   store: new KnexSessionStore({
-  //     knex: require("../data/db-config"),
-  //     tablename: "sessions",
-  //     sidfieldname: "sid",
-  //     createtable: true,
-  //     clearInterval: 1000 * 60 * 60,
-  //   }),
+  store: new KnexSessionStore({
+    knex: require("../data/db-config"),
+    tablename: "sessions",
+    sidfieldname: "sid",
+    createtable: true,
+    clearInterval: 1000 * 60 * 10,
+  }),
 };
 
 server.use(session(sessionConfig));
